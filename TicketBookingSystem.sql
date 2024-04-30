@@ -138,7 +138,7 @@ SELECT * FROM [Event]
 SELECT event_name,available_seats,ticket_price FROM [Event]
 WHERE available_seats IS NOT NULL
 
---4. Write a SQL query to select events name partial match with ‘cup’
+--4. Write a SQL query to select events name partial match with â€˜cupâ€™
 SELECT event_name FROM [Event]
 WHERE event_name LIKE '%cup'
 
@@ -164,7 +164,7 @@ FETCH NEXT 5 ROWS ONLY
 SELECT * FROM Booking
 WHERE num_tickets > 4
 
---10. Write a SQL query to retrieve customer information whose phone number end with ‘000’
+--10. Write a SQL query to retrieve customer information whose phone number end with â€˜000â€™
 SELECT * FROM Customer
 WHERE phone_number LIKE '%000'
 
@@ -173,7 +173,7 @@ SELECT * FROM [Event]
 WHERE total_seats > 15000
 ORDER BY total_seats DESC
 
---12. Write a SQL query to select events name not start with ‘x’, ‘y’, ‘z’
+--12. Write a SQL query to select events name not start with â€˜xâ€™, â€˜yâ€™, â€˜zâ€™
 SELECT event_name FROM [Event]
 WHERE event_name LIKE '[^xyz]%'
 
@@ -309,11 +309,12 @@ SELECT event_id,event_name FROM [Event]
 WHERE event_id NOT IN
 (SELECT event_id FROM Booking)
 
---6. Calculate the Total Number of Tickets Sold for Each Event Type Using a Subquery in the FROM Clause*
-SELECT event_type,SUM(num_tickets) AS Total_tickets_sold
-FROM [Event] E LEFT JOIN Booking B
-ON E.booking_id=B.booking_id
-GROUP BY event_type
+--6. Calculate the Total Number of Tickets Sold for Each Event Type Using a Subquery in the FROM Clause
+SELECT event_type,subquery1.Total_tickets
+FROM [Event] (SELECT event_id,SUM(num_tickets) AS Total_tickets
+FROM Booking 
+GROUP BY event_id) AS subquery1
+WHERE [Event].event_id=subquery1.event_id
 
 --7. Find Events with Ticket Prices Higher Than the Average Ticket Price Using a Subquery in the WHERE Clause 
 SELECT event_id,event_name FROM [Event]
@@ -335,11 +336,12 @@ JOIN Venue V
 ON E.venue_id=V.venue_id
 WHERE venue_name='Wankede')
 
---10. Calculate the Total Number of Tickets Sold for Each Event Category Using a Subquery with GROUP BY*
+--10. Calculate the Total Number of Tickets Sold for Each Event Category Using a Subquery with GROUP BY
 SELECT event_type ,SUM(num_tickets) AS Tickets_sold
-FROM Booking B RIGHT JOIN [Event] E
-ON B.booking_id=E.booking_id
-GROUP BY event_type 
+FROM (SELECT E.event_type,B.num_tickets 
+FROM [Event] E JOIN Booking B 
+ON E.event_id=B.event_id) AS subquery
+GROUP BY event_type
 
 --11. Find Users Who Have Booked Tickets for Events in each Month Using a Subquery with DATE_FORMAT
 SELECT customer_id,DATENAME(MONTH,booking_date) AS [Month] FROM Booking

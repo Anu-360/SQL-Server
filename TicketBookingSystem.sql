@@ -43,7 +43,7 @@ booking_id INT IDENTITY(550,1) NOT NULL PRIMARY KEY,
 customer_id INT,
 FOREIGN KEY(customer_id) REFERENCES Customer(customer_id),
 event_id INT,
-FOREIGN KEY(event_id) REFERENCES Event(event_id),
+FOREIGN KEY(event_id) REFERENCES [Event](event_id),
 num_tickets INT,
 total_cost FLOAT,
 booking_date DATE)

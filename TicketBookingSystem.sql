@@ -27,6 +27,7 @@ total_seats int,
 available_seats int,
 ticket_price DECIMAL,
 event_type VARCHAR(45),
+CONSTRAINT type CHECK (event_type IN ('Movie', 'Sports', 'Concert')),
 booking_id INT)
 
 --Creating Table Customer
